@@ -51,8 +51,7 @@
       position: absolute;
       left: 60%;
       top: 0;
-      transition: transform 0.3s ease, left 0.3s ease, top 0.3s ease;
-    }
+      transition: transform 0.4s ease, left 0.4s ease, top 0.4s ease;
     }
 
     /* Floating hearts */
@@ -144,28 +143,14 @@
 
   function dodge() {
     const no = document.getElementById("no");
+    scale -= 0.08;
+    rotation += 60;
+    if (scale < 0.4) scale = 0.4;
 
-    // Tone down chaos
-    scale -= 0.04;
-    rotation += 25;
-    if (scale < 0.65) scale = 0.65;
-
-    // Button size (approx)
-    const btnWidth = no.offsetWidth * scale;
-    const btnHeight = no.offsetHeight * scale;
-
-    // Keep inside viewport
-    const maxX = window.innerWidth - btnWidth - 20;
-    const maxY = window.innerHeight - btnHeight - 20;
-
-    const x = Math.random() * maxX;
-    const y = Math.random() * maxY;
-
-    no.style.left = x + "px";
-    no.style.top = y + "px";
+    no.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    no.style.top = Math.random() * (window.innerHeight - 100) + "px";
     no.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
   }
-
 
   /* FLOATING HEARTS */
   const hearts = ["💖", "💘", "💕", "💗"];
@@ -187,4 +172,3 @@
 
 </body>
 </html>
-
