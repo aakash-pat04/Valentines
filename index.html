@@ -1,32 +1,99 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>Be My Valentine 💘</title>
+
   <style>
     body {
-      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-      font-family: 'Arial', sans-serif;
+      margin: 0;
+      overflow: hidden;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      margin-top: 100px;
+      color: white;
     }
+
     h1 {
       font-size: 3em;
+      margin-bottom: 30px;
+      text-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
+
+    .buttons {
+      position: relative;
+      z-index: 10;
+    }
+
     button {
       font-size: 22px;
-      padding: 12px 30px;
+      padding: 14px 34px;
       margin: 20px;
       border: none;
-      border-radius: 30px;
+      border-radius: 40px;
       cursor: pointer;
     }
+
     #yes {
       background: #ff4d6d;
       color: white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
     }
+
     #no {
       background: #ffd6e0;
+      color: #333;
       position: absolute;
+      left: 60%;
+      top: 0;
+      transition: transform 0.4s ease, left 0.4s ease, top 0.4s ease;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      bottom: -20px;
+      animation: floatUp linear forwards;
+      opacity: 0.8;
+    }
+
+    @keyframes floatUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-110vh); opacity: 0; }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 14px;
+      opacity: 0.9;
+      animation: confettiFall 1.5s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translate(0,0) rotate(0deg);
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    .yay {
+      font-size: 3em;
+      animation: pop 0.6s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); }
+      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -34,22 +101,75 @@
 
 <h1>Will you be my Valentine? 💖</h1>
 
-<button id="yes" onclick="yes()">Yes 💕</button>
-<button id="no" onmouseover="move()">No 💔</button>
+<div class="buttons">
+  <button id="yes" onclick="yesClick()">Yes 💕</button>
+  <button id="no" onmouseover="dodge()">No 💔</button>
+</div>
 
 <script>
-  function yes() {
-    document.body.innerHTML = "<h1>YAY!! 💘💘💘</h1><p>Best decision ever 😌</p>";
+  /* YES CLICK */
+  function yesClick() {
+    launchConfetti();
+    setTimeout(() => {
+      document.body.innerHTML = "<div class='yay'>YAY!! 💘💘💘<br>Best decision ever 😌</div>";
+    }, 700);
   }
 
-  function move() {
-    const x = Math.random() * (window.innerWidth - 100);
-    const y = Math.random() * (window.innerHeight - 50);
-    const no = document.getElementById("no");
-    no.style.left = x + "px";
-    no.style.top = y + "px";
+  /* CONFETTI */
+  function launchConfetti() {
+    const colors = ["#ff4d6d", "#ffd166", "#4cc9f0", "#80ed99", "#c77dff"];
+
+    for (let i = 0; i < 120; i++) {
+      const confetti = document.createElement("div");
+      confetti.className = "confetti";
+      confetti.style.backgroundColor =
+        colors[Math.floor(Math.random() * colors.length)];
+
+      confetti.style.left = "50%";
+      confetti.style.top = "50%";
+
+      confetti.style.setProperty("--x", (Math.random() * 600 - 300) + "px");
+      confetti.style.setProperty("--y", (Math.random() * 600 - 100) + "px");
+
+      document.body.appendChild(confetti);
+
+      setTimeout(() => confetti.remove(), 1500);
+    }
   }
+
+  /* NO BUTTON CHAOS */
+  let scale = 1;
+  let rotation = 0;
+
+  function dodge() {
+    const no = document.getElementById("no");
+    scale -= 0.08;
+    rotation += 60;
+    if (scale < 0.4) scale = 0.4;
+
+    no.style.left = Math.random() * (window.innerWidth - 100) + "px";
+    no.style.top = Math.random() * (window.innerHeight - 100) + "px";
+    no.style.transform = `scale(${scale}) rotate(${rotation}deg)`;
+  }
+
+  /* FLOATING HEARTS */
+  const hearts = ["💖", "💘", "💕", "💗"];
+
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart";
+    heart.innerText = hearts[Math.floor(Math.random() * hearts.length)];
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.fontSize = (16 + Math.random() * 24) + "px";
+    heart.style.animationDuration = (3 + Math.random() * 4) + "s";
+
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 7000);
+  }
+
+  setInterval(createHeart, 400);
 </script>
 
 </body>
 </html>
+
